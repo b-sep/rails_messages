@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+## Users ##
+User.create!(
+  email_address: 'user@example.com',
+  name: 'Example',
+  password_digest: BCrypt::Password.create('password')
+)

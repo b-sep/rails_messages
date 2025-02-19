@@ -35,8 +35,13 @@ module Backend
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = 'America/Sao_Paulo'
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # https://guides.rubyonrails.org/api_app.html#using-session-middlewares
+    config.session_store :cookie_store, key: '_session_backend'
+    config.middleware.use ActionDispatch::Session::CacheStore
+    config.middleware.use ActionDispatch::Session::CookieStore
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
