@@ -15,18 +15,12 @@ ActiveRecord::Schema[8.0].define(version: 20_250_219_124_002) do
   enable_extension 'pg_catalog.plpgsql'
 
   create_table 'chats', force: :cascade do |t|
+    t.bigint 'initiator_id', null: false
+    t.bigint 'recipient_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-  end
-
-  create_table 'conversations', force: :cascade do |t|
-    t.bigint 'user_id', null: false
-    t.bigint 'chat_id', null: false
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.index ['chat_id'], name: 'index_conversations_on_chat_id'
-    t.index %w[user_id chat_id], name: 'index_conversations_on_user_id_and_chat_id', unique: true
-    t.index ['user_id'], name: 'index_conversations_on_user_id'
+    t.index ['initiator_id'], name: 'index_chats_on_initiator_id'
+    t.index ['recipient_id'], name: 'index_chats_on_recipient_id'
   end
 
   create_table 'messages', force: :cascade do |t|
@@ -59,8 +53,8 @@ ActiveRecord::Schema[8.0].define(version: 20_250_219_124_002) do
     t.index ['email_address'], name: 'index_users_on_email_address', unique: true
   end
 
-  add_foreign_key 'conversations', 'chats'
-  add_foreign_key 'conversations', 'users'
+  add_foreign_key 'chats', 'users', column: 'initiator_id'
+  add_foreign_key 'chats', 'users', column: 'recipient_id'
   add_foreign_key 'messages', 'chats'
   add_foreign_key 'messages', 'users'
   add_foreign_key 'sessions', 'users'

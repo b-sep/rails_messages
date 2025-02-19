@@ -14,3 +14,9 @@ User.create!(
   name: 'Example',
   password_digest: BCrypt::Password.create('password')
 )
+
+User.create!(
+  email_address: 'user@example2.com',
+  name: 'Example 2',
+  password_digest: BCrypt::Password.create('password')
+)

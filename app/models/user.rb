@@ -3,8 +3,8 @@
 class User < ApplicationRecord
   has_secure_password
 
-  has_many :conversations, dependent: :destroy
-  has_many :chats, through: :conversations
+  has_many :initiated_chats, class_name: 'Chat', foreign_key: 'initiator_id', dependent: :destroy
+  has_many :received_chats, class_name: 'Chat', foreign_key: 'recipient_id', dependent: :destroy
   has_many :messages, dependent: :destroy
   has_many :sessions, dependent: :destroy
 

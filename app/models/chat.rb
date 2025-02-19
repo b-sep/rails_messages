@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Chat < ApplicationRecord
-  has_many :conversations, dependent: :destroy
-  has_many :users, through: :conversations
+  belongs_to :initiator, class_name: 'User'
+  belongs_to :recipient, class_name: 'User'
   has_many :messages, dependent: :destroy
 end
