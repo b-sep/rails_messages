@@ -4,6 +4,8 @@ services:
     env_file:
       - .env.example
     image: postgres:17.3-alpine3.21
+    ports:
+      - '5432:5432'
     volumes:
       - backend_pg:/var/lib/postgresql/data
   app:
