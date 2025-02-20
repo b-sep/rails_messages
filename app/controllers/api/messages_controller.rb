@@ -11,6 +11,15 @@ module Api
       end
     end
 
+    def show
+      user = User.find_by(id: params[:id])
+
+      return head :not_found unless user
+      return head :unauthorized unless user == Current.user
+
+      render json: UserMessagesSerializer.new(user).as_json, status: :ok
+    end
+
     private
 
     def message_params
