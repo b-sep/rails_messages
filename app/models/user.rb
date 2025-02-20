@@ -13,4 +13,12 @@ class User < ApplicationRecord
   validates :email_address, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :email_address, uniqueness: true
   validates :name, presence: true
+
+  def received_messages
+    chats = Chat.all_chats_for(id)
+
+    Message.where(chat_id: chats.pluck(:id))
+           .where.not(user_id: id)
+           .order(created_at: :asc)
+  end
 end
