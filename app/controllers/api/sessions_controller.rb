@@ -6,7 +6,7 @@ module Api
     rate_limit to: 10, within: 3.minutes, only: :create, with: -> { head :no_content }
 
     def create
-      if user = User.authenticate_by(params.permit(:email_address, :password))
+      if user = User.find_by(email_address: params[:email_address])
         session = start_new_session_for(user)
 
         render json: { token: session.token }, status: :created

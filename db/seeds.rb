@@ -11,12 +11,10 @@
 ## Users ##
 User.create!(
   email_address: 'user@example.com',
-  name: 'Example',
-  password_digest: BCrypt::Password.create('password')
+  name: 'Example'
 )
 
 User.create!(
   email_address: 'user@example2.com',
-  name: 'Example 2',
-  password_digest: BCrypt::Password.create('password')
+  name: 'Example 2'
 )
