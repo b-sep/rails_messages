@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 class Message < ApplicationRecord
-  belongs_to :chat
-  belongs_to :user
+  belongs_to :sender,    class_name: 'User'
+  belongs_to :recipient, class_name: 'User'
 
   validates :content, presence: true
-
-  scope :chat_messages, ->(chat_id) { where(chat_id: chat_id).order(created_at: :asc) }
 end

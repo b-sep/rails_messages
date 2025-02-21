@@ -23,14 +23,4 @@ class UserTest < ActiveSupport::TestCase
     assert_predicate(user, :invalid?)
     assert_equal(['Name can\'t be blank'], user.errors.full_messages_for(:name))
   end
-
-  test '#received_messages' do
-    user = users(:john)
-    chat = chats(:one)
-    sended_message = chat.messages.create!(user: user, content: 'Hi, i just sent that! :)')
-    received_message = chat.messages.create!(user: users(:nodz), content: 'Hi, i just receive that! :)')
-
-    assert_includes(user.received_messages, received_message)
-    refute_includes(user.received_messages, sended_message)
-  end
 end

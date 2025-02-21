@@ -3,27 +3,23 @@
 require 'test_helper'
 
 class MessageControllerTest < ActionDispatch::IntegrationTest
-  test 'POST /messages find or create a chat and send message to it' do
-    Chat.destroy_all
+  test 'POST /messages creates an message from to an user' do
+    sender = users(:john)
+    recipient = users(:nodz)
 
-    assert_difference('Chat.count', +1) do
-      sender = users(:john)
-      recipient = users(:nodz)
+    login(sender)
 
-      login(sender)
-
-      params = {
-        message: {
-          recipient: recipient.id,
-          content: 'Hello, Nodz :)'
-        }
+    params = {
+      message: {
+        recipient: recipient.id,
+        content: 'Hello, Nodz :)'
       }
+    }
 
-      post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
-      assert_response :created
-      assert_equal('Hello, Nodz :)', sender.messages.last.content)
-      assert_equal('Hello, Nodz :)', recipient.received_chats.last.messages.last.content)
-    end
+    post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
+    assert_response :created
+    assert_equal('Hello, Nodz :)', sender.messages.last.content)
+    assert_equal('Hello, Nodz :)', recipient.received_chats.last.messages.last.content)
   end
 
   test 'POST /messages returns error if recipient isnt found' do
