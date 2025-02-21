@@ -11,7 +11,7 @@ class UserMessagesSerializer < ActiveModel::Serializer
   end
 
   def user
-    object.id
+    object.email_address
   end
 
   private
@@ -26,7 +26,7 @@ class UserMessagesSerializer < ActiveModel::Serializer
   end
 
   def sended_messages
-    object.messages.map do |message|
+    object.sended_messages.map do |message|
       {
         content: message.content,
         sended_at: I18n.l(message.created_at, format: :long)

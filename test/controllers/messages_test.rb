@@ -11,15 +11,15 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
 
     params = {
       message: {
-        recipient: recipient.id,
+        recipient: recipient.email_address,
         content: 'Hello, Nodz :)'
       }
     }
 
     post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
     assert_response :created
-    assert_equal('Hello, Nodz :)', sender.messages.last.content)
-    assert_equal('Hello, Nodz :)', recipient.received_chats.last.messages.last.content)
+    assert_equal('Hello, Nodz :)', sender.sended_messages.last.content)
+    assert_equal('Hello, Nodz :)', recipient.received_messages.last.content)
   end
 
   test 'POST /messages returns error if recipient isnt found' do
@@ -43,7 +43,7 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
 
     params = {
       message: {
-        recipient: recipient.id,
+        recipient: recipient.email_address,
         content: 'Hello, Nodz :)'
       }
     }
@@ -54,11 +54,9 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'GET /messages/:id return a json with messages from user' do
-    Message.destroy_all
     user = users(:john)
-    chat = chats(:one)
-    sended_message = chat.messages.create!(user: user, content: 'Hi, i just sent that! :)')
-    received_message = chat.messages.create!(user: users(:nodz), content: 'Hi, i just receive that! :)')
+    sended_message = user.sended_messages.last
+    received_message = user.received_messages.last
 
     login(user)
 
@@ -67,7 +65,7 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal(
       {
-        user: user.id,
+        user: user.email_address,
         messages: {
           sended_messages: [
             {
@@ -110,6 +108,6 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
 
   def login(user)
     post api_session_path, headers: { 'HTTP_USER_AGENT' => 'Mozilla/5.0' },
-                           params: { email_address: user.email_address, password: 'password' }
+                           params: { email_address: user.email_address }
   end
 end
