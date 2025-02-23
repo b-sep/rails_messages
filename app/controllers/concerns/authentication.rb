@@ -52,6 +52,7 @@ module Authentication
   end
 
   def terminate_session
+    # TODO: maybe this should be Current.session = nil to prevent destroy session records
     Current.session.destroy
   end
 end

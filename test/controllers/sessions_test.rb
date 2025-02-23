@@ -20,7 +20,6 @@ class SessionControllerTest < ActionDispatch::IntegrationTest
                            params: { email_address: 'invalid@email.com' }
 
     assert_response :unauthorized
-    assert_equal({ error: 'Try again' }, parsed_body)
   end
 
   test 'DELETE /api/session destroys session' do

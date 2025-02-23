@@ -11,7 +11,7 @@ module Api
 
         render json: { token: session.token }, status: :created
       else
-        render json: { error: 'Try again' }, status: :unauthorized
+        head :unauthorized
       end
     end
 
