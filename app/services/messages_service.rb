@@ -11,12 +11,12 @@ class MessagesService < BaseService
   def call
     recipient = User.find_by(email_address: params[:recipient])
 
-    return result(false, error: 'Recipient not found') unless recipient
+    return result(false, error: 'Tem certeza que é esse o email?') unless recipient
 
     Message.create!(recipient:, sender: current_user, content: params[:content])
 
     result(true)
   rescue ActiveRecord::RecordInvalid => _e
-    result(false, error: 'Content can\'t be blank')
+    result(false, error: 'Mensagem vazia não rola =/')
   end
 end

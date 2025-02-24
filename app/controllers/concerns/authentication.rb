@@ -27,7 +27,7 @@ module Authentication
   end
 
   def render_unauthorized
-    render json: { error: 'Please log in' }, status: :unauthorized
+    head :unauthorized
   end
 
   def start_new_session_for(user)
