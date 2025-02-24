@@ -13,7 +13,7 @@ class UserMessagesSerializer < ActiveModel::Serializer
   private
 
   def received_messages
-    object.received_messages.map do |message|
+    object.received_messages.includes(:sender).map do |message|
       {
         content: message.content,
         from: message.sender.name,
@@ -23,7 +23,7 @@ class UserMessagesSerializer < ActiveModel::Serializer
   end
 
   def sended_messages
-    object.sended_messages.map do |message|
+    object.sended_messages.includes(:recipient).map do |message|
       {
         content: message.content,
         sended_at: I18n.l(message.created_at, format: :long),
