@@ -5,9 +5,9 @@ module Api
     def create
       res = MessagesService.new(current_user: Current.user, params: message_params).call
 
-      case res.success?
-      in false then head :bad_request
-      in true then head :created
+      case res.error.present?
+      in true  then render json: { error: res.error }, status: :unprocessable_entity
+      in false then head :created
       end
     end
 

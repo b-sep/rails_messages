@@ -16,5 +16,7 @@ class MessagesService < BaseService
     Message.create!(recipient:, sender: current_user, content: params[:content])
 
     result(true)
+  rescue ActiveRecord::RecordInvalid => _e
+    result(false, error: 'Content can\'t be blank')
   end
 end

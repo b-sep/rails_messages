@@ -35,7 +35,8 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
     }
 
     post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
-    assert_response :bad_request
+    assert_response :unprocessable_entity
+    assert_equal({ error: 'Recipient not found' }, parsed_body)
   end
 
   test 'POST /messages returns unauthorized if isnt log' do
@@ -51,6 +52,24 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
     post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last&.token}" }, params: params
     assert_response :unauthorized
     assert_equal({ error: 'Please log in' }, parsed_body)
+  end
+
+  test 'POST /messages returns error if content is nil' do
+    sender = users(:john)
+    recipient = users(:nodz)
+
+    login(sender)
+
+    params = {
+      message: {
+        recipient: recipient.email_address,
+        content: nil
+      }
+    }
+
+    post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
+    assert_response :unprocessable_entity
+    assert_equal({ error: 'Content can\'t be blank' }, parsed_body)
   end
 
   test 'GET /messages/:id return a json with messages from user' do
