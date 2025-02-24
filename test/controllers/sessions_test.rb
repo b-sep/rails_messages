@@ -11,7 +11,7 @@ class SessionControllerTest < ActionDispatch::IntegrationTest
                              params: { email_address: user.email_address }
 
       assert_response :created
-      assert_equal({ token: Session.last.token }, parsed_body)
+      assert_equal({ user_name: user.name, user_id: user.id, token: Session.last.token }, parsed_body)
     end
   end
 

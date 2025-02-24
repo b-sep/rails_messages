@@ -9,7 +9,7 @@ module Api
       if user = User.find_by(email_address: params[:email_address])
         session = start_new_session_for(user)
 
-        render json: { token: session.token }, status: :created
+        render json: { user_name: user.name, user_id: session.user_id, token: session.token }, status: :created
       else
         head :unauthorized
       end
