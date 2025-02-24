@@ -65,17 +65,18 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal(
       {
-        user: user.email_address,
         messages: {
           sended_messages: [
             {
               content: sended_message.content,
-              sended_at: I18n.l(sended_message.created_at, format: :long)
+              sended_at: I18n.l(sended_message.created_at, format: :long),
+              to: sended_message.recipient.name
             }
           ],
           received_messages: [
             {
               content: received_message.content,
+              from: received_message.sender.name,
               received_at: I18n.l(received_message.created_at, format: :long)
             }
           ]

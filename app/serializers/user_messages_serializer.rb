@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserMessagesSerializer < ActiveModel::Serializer
-  attributes :user, :messages
+  attributes :messages
 
   def messages
     {
@@ -10,16 +10,13 @@ class UserMessagesSerializer < ActiveModel::Serializer
     }
   end
 
-  def user
-    object.email_address
-  end
-
   private
 
   def received_messages
     object.received_messages.map do |message|
       {
         content: message.content,
+        from: message.sender.name,
         received_at: I18n.l(message.created_at, format: :long)
       }
     end
@@ -29,7 +26,8 @@ class UserMessagesSerializer < ActiveModel::Serializer
     object.sended_messages.map do |message|
       {
         content: message.content,
-        sended_at: I18n.l(message.created_at, format: :long)
+        sended_at: I18n.l(message.created_at, format: :long),
+        to: message.recipient.name
       }
     end
   end
