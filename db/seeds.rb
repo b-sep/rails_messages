@@ -9,12 +9,12 @@
 #   end
 
 ## Users ##
-User.create!(
+User.create(
   email_address: 'user@example.com',
   name: 'Example'
 )
 
-User.create!(
-  email_address: 'user@example2.com',
+User.create(
+  email_address: 'user2@example.com',
   name: 'Example 2'
 )
