@@ -1,24 +1,21 @@
-# README
+# Backend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Api escrita em Ruby on Rails para troca de mensagens entre usuários.
 
-Things you may want to cover:
+## Tecnologias Utilizadas
 
-* Ruby version
+- Ruby
+- Ruby on Rails
+- PostgreSQL
+- Docker
 
-* System dependencies
+## Executando o Projeto
 
-* Configuration
+**Docker e Docker Compose são dependências do Projeto**
 
-* Database creation
+- make setup
+- make up
+- make tests ***(para rodar os testes)***
+- make bash interage com o container
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Para informações sobre as rotas, clique [aqui](docs/api.md)
