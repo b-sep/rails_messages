@@ -13,10 +13,29 @@ class MessagesService < BaseService
 
     return result(false, error: 'Tem certeza que é esse o email?') unless recipient
 
-    Message.create!(recipient:, sender: current_user, content: params[:content])
+    message = Message.create!(recipient:, sender: current_user, content: params[:content])
+
+    broadcast_messages(message, recipient)
 
     result(true)
   rescue ActiveRecord::RecordInvalid => _e
     result(false, error: 'Mensagem vazia não rola =/')
+  end
+
+  private
+
+  def broadcast_messages(message, recipient)
+    created_at = I18n.l(message.created_at, format: :long)
+    content = message.content
+
+    ActionCable.server.broadcast(
+      "message_#{current_user.id}",
+      { type: 'sended', message: { content:, to: recipient.name, sended_at: created_at } }
+    )
+
+    ActionCable.server.broadcast(
+      "message_#{recipient.id}",
+      { type: 'received', message: { content:, from: current_user.name, received_at: created_at } }
+    )
   end
 end
