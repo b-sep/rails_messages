@@ -30,12 +30,12 @@ class MessagesService < BaseService
 
     ActionCable.server.broadcast(
       "message_#{current_user.id}",
-      { type: 'sended', message: { content:, to: recipient.name, sended_at: created_at } }
+      { type: 'sended', content:, to: recipient.name, sended_at: created_at }
     )
 
     ActionCable.server.broadcast(
       "message_#{recipient.id}",
-      { type: 'received', message: { content:, from: current_user.name, received_at: created_at } }
+      { type: 'received', content:, from: current_user.name, received_at: created_at }
     )
   end
 end
