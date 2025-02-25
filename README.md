@@ -8,6 +8,7 @@ Api escrita em Ruby on Rails para troca de mensagens entre usuários.
 - Ruby on Rails
 - PostgreSQL
 - Docker
+- ActionCable
 
 ## Executando o Projeto
 
