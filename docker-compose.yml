@@ -15,20 +15,31 @@ services:
       - '6379:6379'
     volumes:
       - backend_redis:/data
-  app:
+  base_app:
     build:
       context: .
-    container_name: backend_app
     depends_on:
       - db
       - redis
     env_file:
       - .env.example
-    ports:
-      - '3000:3000'
     volumes:
       - backend_gems:/usr/local/bundle
       - .:/backend
+  app:
+    extends:
+      service: base_app
+    command: bin/dev
+    container_name: backend_app
+    depends_on:
+      - sidekiq
+    ports:
+      - '3000:3000'
+  sidekiq:
+    extends:
+      service: base_app
+    command: ["bundle", "exec", "sidekiq"]
+    container_name: backend_sidekiq
 
 volumes:
   backend_gems:

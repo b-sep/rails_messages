@@ -7,4 +7,3 @@ ENV RUBY_YJIT_ENABLE=1
 COPY ./entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-CMD ["bin/dev"]
