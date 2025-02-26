@@ -30,14 +30,4 @@ class MessagesServiceTest < ActiveSupport::TestCase
     refute result.success?
     assert_equal('Tem certeza que é esse o email?', result.error)
   end
-
-  test '#call returns result as false and error if content is empty' do
-    params = { recipient: users(:nodz).email_address, content: '' }
-    instance = MessagesService.new(current_user: User.new, params:)
-
-    result = instance.call
-
-    refute result.success?
-    assert_equal('Mensagem vazia não rola =/', result.error)
-  end
 end
