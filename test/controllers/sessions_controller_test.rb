@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class SessionControllerTest < ActionDispatch::IntegrationTest
+class SessionsControllerTest < ActionDispatch::IntegrationTest
   test 'POST /api/session creates a session to user if user exists' do
     assert_difference('Session.count', +1) do
       user = users(:john)
