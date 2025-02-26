@@ -8,12 +8,20 @@ services:
       - '5432:5432'
     volumes:
       - backend_pg:/var/lib/postgresql/data
+  redis:
+    container_name: backend_redis
+    image: redis:7.4.2-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - backend_redis:/data
   app:
     build:
       context: .
     container_name: backend_app
     depends_on:
       - db
+      - redis
     env_file:
       - .env.example
     ports:
@@ -25,3 +33,4 @@ services:
 volumes:
   backend_gems:
   backend_pg:
+  backend_redis:
