@@ -3,12 +3,9 @@
 module Api
   class MessagesController < ApplicationController
     def create
-      res = MessagesService.new(current_user: Current.user, params: message_params).call
+      CreateMessageJob.perform_later(Current.user.id, message_params.to_h)
 
-      case res.error.present?
-      in true  then render json: { error: res.error }, status: :unprocessable_entity
-      in false then head :created
-      end
+      head :ok
     end
 
     def show
@@ -23,7 +20,10 @@ module Api
     private
 
     def message_params
-      params.expect(message: %i[content recipient])
+      params.expect(message: %i[content recipient]).tap do |params|
+        params.expect(:content)
+        params.expect(:recipient)
+      end
     end
   end
 end

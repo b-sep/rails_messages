@@ -18,8 +18,6 @@ class MessagesService < BaseService
     broadcast_messages(message, recipient)
 
     result(true)
-  rescue ActiveRecord::RecordInvalid => _e
-    result(false, error: 'Mensagem vazia não rola =/')
   end
 
   private

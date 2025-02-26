@@ -2,8 +2,8 @@
 
 require 'test_helper'
 
-class MessageControllerTest < ActionDispatch::IntegrationTest
-  test 'POST /messages creates an message from to an user' do
+class MessagesControllerTest < ActionDispatch::IntegrationTest
+  test 'POST /messages schedules a job to create a message from to an user' do
     sender = users(:john)
     recipient = users(:nodz)
 
@@ -11,32 +11,31 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
 
     params = {
       message: {
-        recipient: recipient.email_address,
-        content: 'Hello, Nodz :)'
+        content: 'Hello, Nodz :)',
+        recipient: recipient.email_address
       }
     }
 
     post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
-    assert_response :created
-    assert_equal('Hello, Nodz :)', sender.sended_messages.last.content)
-    assert_equal('Hello, Nodz :)', recipient.received_messages.last.content)
+    assert_response :ok
+    assert_enqueued_with(job: CreateMessageJob, args: [sender.id, params[:message].transform_keys(&:to_s)])
   end
 
-  test 'POST /messages returns error if recipient isnt found' do
+  test 'POST /messages returns bad request if params are missing' do
     sender = users(:john)
 
     login(sender)
 
     params = {
       message: {
-        recipient: 'invalid',
-        content: 'Hello, Nodz :)'
+        recipient: 'email@email.com',
+        content: nil
       }
     }
 
     post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
-    assert_response :unprocessable_entity
-    assert_equal({ error: 'Tem certeza que é esse o email?' }, parsed_body)
+    assert_response :bad_request
+    assert_no_enqueued_jobs
   end
 
   test 'POST /messages returns unauthorized if isnt log' do
@@ -51,24 +50,6 @@ class MessageControllerTest < ActionDispatch::IntegrationTest
 
     post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last&.token}" }, params: params
     assert_response :unauthorized
-  end
-
-  test 'POST /messages returns error if content is nil' do
-    sender = users(:john)
-    recipient = users(:nodz)
-
-    login(sender)
-
-    params = {
-      message: {
-        recipient: recipient.email_address,
-        content: nil
-      }
-    }
-
-    post api_messages_path, headers: { HTTP_AUTHORIZATION: "Bearer #{Session.last.token}" }, params: params
-    assert_response :unprocessable_entity
-    assert_equal({ error: 'Mensagem vazia não rola =/' }, parsed_body)
   end
 
   test 'GET /messages/:id return a json with messages from user' do
