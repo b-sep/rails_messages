@@ -53,17 +53,11 @@ Retorna status `204`
 
 ### Sucesso
 
-Retorna status `201`
+Retorna status `200` após **agendar** um job.
 
 ### Falha
 
-Retorna status `422` com um json apontando o erro, por exemplo, quando o email fornecido não é de nenhum usuário:
-
-```json
-{
-    "error": "Tem certeza que é esse email?"
-}
-```
+Retorna status `400` caso algum parâmetro esteja faltando.
 
 Retorna status `401` quando o usuário não esta logado.
 
